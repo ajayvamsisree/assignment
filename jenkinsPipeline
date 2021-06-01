@@ -1,0 +1,27 @@
+pipeline {
+    agent {
+        label 'kubernetes'
+    }
+    stages {
+        stage('Nginx Deployment') {
+            steps {
+                cleanWs()
+                sh '''
+                git clone https://github.com/ajayvamsisree/assignment.git
+                cd assignment
+                kubectl apply -f nginx-deployment.yaml
+                kubectl get pods
+                '''
+            }
+        }
+        stage('Nginx service Deployment') {
+            steps {
+                sh '''
+                cd assignment
+                kubectl apply -f nginx-service.yaml
+                kubectl get svc
+                '''
+            }
+        }
+    }
+}
